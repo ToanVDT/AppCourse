@@ -12,7 +12,9 @@ import {
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Courses from "../data/AllCourseX.json";
+import Courses from "../../data/AllCourseX.json";
+
+
 const { width } = Dimensions.get("window");
 
 const SPACING = 10;

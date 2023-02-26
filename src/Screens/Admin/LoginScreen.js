@@ -148,7 +148,7 @@ export default function LoginScreen({ navigation }) {
           >
             <Image
               style={styles.googleLogo}
-              source={require("../../assets/google-logo.png")}
+              source={require("../../../assets/google-logo.png")}
             />
             <Text style={styles.googleButtonText}>Sign in with Google</Text>
           </TouchableOpacity>

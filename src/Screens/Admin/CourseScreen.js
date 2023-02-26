@@ -18,7 +18,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
-import Courses from "../data/AllCourseX.json";
+import Courses from "../../data/AllCourseX.json";
 
 
 
