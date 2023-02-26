@@ -19,6 +19,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Courses from "../data/AllCourseX.json";
+
+
+
 export default function CourseScreen({navigation}) {
     const [visible, setVisible] = useState(false);
     const [rowMap, setRowMap] = useState();
@@ -59,13 +62,15 @@ export default function CourseScreen({navigation}) {
     );
 
     const renderHiddenItem = (data, rowMap) => (
-        <View style={styles.rowBack}>
-            <Text>Left</Text>
+        <View style={[styles.rowBack]}>
+            <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
+            <Feather name="clipboard" size={22} color="black"></Feather>
+                Roster Register</Text>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
                 onPress={() => closeRow(rowMap, data.item.key)}
             >
-                <Text style={styles.backTextWhite}>
+                <Text style={styles.backTextWhite} onPress={()=> navigation.navigate("EditCourse")}>
                     <Feather name="edit" size={22} color="#7C808D"></Feather>
                     Edit</Text>
             </TouchableOpacity>
@@ -87,17 +92,16 @@ export default function CourseScreen({navigation}) {
     return (
         <Provider>
         <SafeAreaView style={styles.container}>
-          <View style={{marginTop:"10%",backgroundColor:"#3662AA",height:50}}>
+          <View style={{marginTop:"10%",backgroundColor:"#93FFE8",height:40}}>
             <Text style={{
-                color:"white",
+                color:"black",
                 fontSize:20,
-                fontStyle:"bold",
-                paddingLeft:30,
+                fontWeight:"bold",
+                paddingLeft:15,
                 padingTop:20}}>Manager Course</Text>
           </View>
           <Button title="Add Course" style={{backgroundColor:"green",marginTop:"5%",width:"35%", marginLeft:"2%"}}
           onPress={()=> navigation.navigate("AddCourse")}>
-            <Feather name="plus-circle" size={22} color="black"></Feather>
             </Button> 
             <SwipeListView              
                 data={listData}
@@ -184,4 +188,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         right: 0,
     },
+    backLeftBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+        color:'white',
+        backgroundColor: 'green',
+        left: 0,
+    },
+    
 });

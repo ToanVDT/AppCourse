@@ -12,6 +12,8 @@ import UserManagerScreen from '../Screens/UserManagerScreen';
 import CourseDetailScreen from '../Screens/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
 import AddCourseScreen from '../Screens/AddCourseScreen';
+import EditCourseScreen from '../Screens/EditCourseScreen';
+import RosterRegisterScreen from '../Screens/RosterRegisterScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +32,8 @@ function AppNavigation() {
         <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
         <Stack.Screen name="HomeTab" component={BottomTabNavigator} />
         <Stack.Screen name="AddCourse" component={AddCourseScreen} />
+        <Stack.Screen name="EditCourse" component={EditCourseScreen} />
+        <Stack.Screen name="RosterRegister" component={RosterRegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     

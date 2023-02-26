@@ -36,6 +36,7 @@ const Home = ({ navigation }) => {
                           fontWeight: "400",
                           color: '#000',
                           backgroundColor:"#93FFE8",
+                          height:40,
                           paddingLeft:15,
                           marginVertical: SPACING * 2,
                           fontWeight:"bold"
