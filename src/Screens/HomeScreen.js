@@ -11,9 +11,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import AllCourse from "../data/AllCourse";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Courses from "../data/AllCourse";
+import Courses from "../data/AllCourseX.json";
 const { width } = Dimensions.get("window");
 
 const SPACING = 10;
@@ -53,7 +52,7 @@ const Home = ({ navigation }) => {
                               justifyContent: "space-between",
                               marginVertical: SPACING * 2,
                           }}>
-                          {Courses.map((item, i) => (
+                          {Courses.data.map((item, i) => (
                               <TouchableOpacity
                                   style={[
                                       {

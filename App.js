@@ -8,13 +8,14 @@ import BottomTabNavigator from "./src/Navigations/BottomTabNavigators";
 import CourseScreen from "./src/Screens/CourseScreen";
 export default function App() {
   return (
-    //<AppNavigation />
+    <AppNavigation />
     //<LoginScreen/>
     //<RegisterScreen/>
     //<ForgotPasswordScreen/>
-    //<HomeScreen/>
+    // <HomeScreen/>
     //<BottomTabNavigator/>
-    <CourseScreen/>
+    //<CourseScreen/>
+   
   );
 }
 

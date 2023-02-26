@@ -1,4 +1,8 @@
-const Courses = [
+{
+    "httpStatusCode": 200,
+    "isSuccess": true,
+    "message": "",
+    "data": [
       {
         "courseId": 1,
         "courseName": "Java Script Basic",
@@ -15,7 +19,7 @@ const Courses = [
         "price": 100,
         "rosters": null,
         "isActive": false,
-        "imageName":require('../../assets/javascript-basic.png'),
+        "imageName": "Resources\\Images\\javascript-basic.png"
       },
       {
         "courseId": 2,
@@ -33,7 +37,7 @@ const Courses = [
         "price": 99,
         "rosters": null,
         "isActive": true,
-        "imageName": require('../../assets/reactjs.png'),
+        "imageName": "Resources\\Images\\reactjs.png"
       },
       {
         "courseId": 3,
@@ -51,7 +55,7 @@ const Courses = [
         "price": 200,
         "rosters": null,
         "isActive": true,
-        "imageName":require('../../assets/english.png'),
+        "imageName": "Resources\\Images\\english.png"
       },
       {
         "courseId": 4,
@@ -69,7 +73,7 @@ const Courses = [
         "price": 65,
         "rosters": null,
         "isActive": true,
-        "imageName":require('../../assets/ubuntu.png'),
+        "imageName": "Resources\\Images\\ubuntu.png"
       },
       {
         "courseId": 5,
@@ -87,7 +91,7 @@ const Courses = [
         "price": 19,
         "rosters": null,
         "isActive": true,
-        "imageName":require('../../assets/html-css-pro.png'),
+        "imageName": "Resources\\Images\\html-css-pro.png"
       },
       {
         "courseId": 6,
@@ -105,7 +109,7 @@ const Courses = [
         "price": 99,
         "rosters": null,
         "isActive": true,
-        "imageName":require('../../assets/manage-time.jpg'),
-      },
-    ];
-export default Courses;
+        "imageName": "Resources\\Images\\manage-time.jpg"
+      }
+    ]
+  }

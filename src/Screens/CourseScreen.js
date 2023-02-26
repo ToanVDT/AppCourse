@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Feather } from "@expo/vector-icons";
 import {
     StyleSheet,
     Text,
@@ -6,14 +7,25 @@ import {
     TouchableHighlight,
     View,
 } from 'react-native';
+import {
+  Provider,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogActions,
+  } from "@react-native-material/core";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
-
-export default function Basic() {
+import Courses from "../data/AllCourseX.json";
+export default function CourseScreen({navigation}) {
+    const [visible, setVisible] = useState(false);
+    const [rowMap, setRowMap] = useState();
+    const [data, setData] = useState();
     const [listData, setListData] = useState(
-        Array(20)
-            .fill('')
-            .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
+        Courses.data
+            .map((item, i) => ({ key: `${i}`, text: item.courseName }))
     );
 
     const closeRow = (rowMap, rowKey) => {
@@ -41,7 +53,7 @@ export default function Basic() {
             underlayColor={'#AAA'}
         >
             <View>
-                <Text>I am {data.item.text} in a SwipeListView</Text>
+                <Text>{data.item.text}</Text>
             </View>
         </TouchableHighlight>
     );
@@ -53,23 +65,41 @@ export default function Basic() {
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
                 onPress={() => closeRow(rowMap, data.item.key)}
             >
-                <Text style={styles.backTextWhite}>Close</Text>
+                <Text style={styles.backTextWhite}>
+                    <Feather name="edit" size={22} color="#7C808D"></Feather>
+                    Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnRight]}
-                onPress={() => deleteRow(rowMap, data.item.key)}
+                onPress={() => {
+                    setVisible(true);
+                    setRowMap([rowMap, data.item.key]);
+                    setData([data.item.text])}}
             >
-                <Text style={styles.backTextWhite}>Delete</Text>
+                <Text style={styles.backTextWhite}>
+                <Feather name="trash-2" size={22} color="#7C808D"></Feather>
+                    Delete
+                    </Text>
             </TouchableOpacity>
         </View>
     );
-
+    
     return (
-        <View style={styles.container}>
-          <View style={{marginTop:"10%",backgroundColor:"red",height:50}}>
-            <Text>Manager Course</Text>
+        <Provider>
+        <SafeAreaView style={styles.container}>
+          <View style={{marginTop:"10%",backgroundColor:"#3662AA",height:50}}>
+            <Text style={{
+                color:"white",
+                fontSize:20,
+                fontStyle:"bold",
+                paddingLeft:30,
+                padingTop:20}}>Manager Course</Text>
           </View>
-            <SwipeListView
+          <Button title="Add Course" style={{backgroundColor:"green",marginTop:"5%",width:"35%", marginLeft:"2%"}}
+          onPress={()=> navigation.navigate("AddCourse")}>
+            <Feather name="plus-circle" size={22} color="black"></Feather>
+            </Button> 
+            <SwipeListView              
                 data={listData}
                 renderItem={renderItem}
                 renderHiddenItem={renderHiddenItem}
@@ -80,7 +110,31 @@ export default function Basic() {
                 previewOpenDelay={3000}
                 onRowDidOpen={onRowDidOpen}
             />
-        </View>
+        </SafeAreaView>
+        <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+                <DialogHeader title="Delete Course"/>
+                    <DialogContent>
+                    <Text>
+                        Delete Course:{data}?
+                    </Text>
+                </DialogContent>
+                <DialogActions>
+                <Button
+                    title="Cancel"
+                    compact
+                    variant="text"
+                    onPress={() =>setVisible(false)}
+                />
+                <Button
+                    title="Ok"
+                    compact
+                    variant="text"
+                    onPress={() => {deleteRow(rowMap[0],rowMap[1]);
+                        setVisible(false)}}
+                />
+                </DialogActions>
+            </Dialog>
+        </Provider>
     );
 }
 
@@ -89,6 +143,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         
+    },
+    createCourse:{
+        color: '#000',
     },
     backTextWhite: {
         color: '#FFF',
