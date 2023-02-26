@@ -11,6 +11,7 @@ import ForgotPasswordScreen from '../Screens/ForgotPasswordScreen';
 import UserManagerScreen from '../Screens/UserManagerScreen';
 import CourseDetailScreen from '../Screens/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
+import AddCourseScreen from '../Screens/AddCourseScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -28,7 +29,7 @@ function AppNavigation() {
         <Stack.Screen name="UserManager" component={UserManagerScreen} />
         <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
         <Stack.Screen name="HomeTab" component={BottomTabNavigator} />
-      
+        <Stack.Screen name="AddCourse" component={AddCourseScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     

@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 function BottomTabNavigators() {
 
     return (
-        <NavigationContainer>
+        
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
@@ -72,7 +72,7 @@ function BottomTabNavigators() {
                             ></FontAwesome5>
                         </View>
                     ),
-                    tabBarStyle: { display: "none" },
+                    
                 }}
             />
               < Tab.Screen
@@ -113,7 +113,7 @@ function BottomTabNavigators() {
                 }} />
 
         </ Tab.Navigator >
-        </NavigationContainer>
+        
     );
 }
 
