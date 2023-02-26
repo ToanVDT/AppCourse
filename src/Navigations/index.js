@@ -2,18 +2,18 @@ import React from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomeScreen from '../Screens/HomeScreen';
-import CourseScreen from '../Screens/CourseScreen';
-import ProfileScreen from '../Screens/ProfileScreen';
-import LoginScreen from '../Screens/LoginScreen';
-import RegisterScreen from '../Screens/RegisterScreen';
-import ForgotPasswordScreen from '../Screens/ForgotPasswordScreen';
-import UserManagerScreen from '../Screens/UserManagerScreen';
-import CourseDetailScreen from '../Screens/CourseDetailScreen';
+import HomeScreen from '../Screens/Admin/HomeScreen';
+import CourseScreen from '../Screens/Admin/CourseScreen';
+import ProfileScreen from '../Screens/Admin/ProfileScreen';
+import LoginScreen from '../Screens/Admin/LoginScreen';
+import RegisterScreen from '../Screens/Admin/RegisterScreen';
+import ForgotPasswordScreen from '../Screens/Admin/ForgotPasswordScreen';
+import UserManagerScreen from '../Screens/Admin/UserManagerScreen';
+import CourseDetailScreen from '../Screens/Admin/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
-import AddCourseScreen from '../Screens/AddCourseScreen';
-import EditCourseScreen from '../Screens/EditCourseScreen';
-import RosterRegisterScreen from '../Screens/RosterRegisterScreen';
+import AddCourseScreen from '../Screens/Admin/AddCourseScreen';
+import EditCourseScreen from '../Screens/Admin/EditCourseScreen';
+import RosterRegisterScreen from '../Screens/Admin/RosterRegisterScreen';
 
 
 const Stack = createNativeStackNavigator();
