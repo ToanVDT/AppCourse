@@ -1,10 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+
 import HomeScreen from '../Screens/Admin/HomeScreen';
 import ProfileScreen from '../Screens/Admin/ProfileScreen';
 import CourseScreen from '../Screens/Admin/CourseScreen';
 import UserManagerScreen from '../Screens/Admin/UserManagerScreen';
+
 
 
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -56,7 +57,7 @@ function BottomTabNavigators() {
                 }} />
 
             < Tab.Screen
-                name='Course'
+                name='course'
                 component={CourseScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (

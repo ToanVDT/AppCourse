@@ -24,13 +24,10 @@ import Courses from "../../data/AllCourseX.json";
 
 export default function CourseScreen({navigation}) {
     const [visible, setVisible] = useState(false);
-    const [rowMap, setRowMap] = useState();
+    const [pos, setPos] = useState();
     const [data, setData] = useState();
-    const [listData, setListData] = useState(
-        Courses.data
-            .map((item, i) => ({ key: `${i}`, text: item.courseName }))
-    );
-
+    const [listData, setListData] = useState(Courses.data);
+        
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
             rowMap[rowKey].closeRow();
@@ -39,36 +36,41 @@ export default function CourseScreen({navigation}) {
 
     const deleteRow = (rowMap, rowKey) => {
         closeRow(rowMap, rowKey);
-        const newData = [...listData];
-        const prevIndex = listData.findIndex(item => item.key === rowKey);
-        newData.splice(prevIndex, 1);
-        setListData(newData);
+        const prevIndex = listData.filter((item) => item.key !== rowKey)
+        setListData(prevIndex);
     };
 
     const onRowDidOpen = rowKey => {
         console.log('This row opened', rowKey);
     };
 
-    const renderItem = data => (
+    const renderItem = data => {
+        
+        return(
         <TouchableHighlight
-            onPress={() => console.log('You touched me')}
+    
+            key={data.item.courseId}
+            onPress={() => navigation.navigate('CourseDetail',{item:data.item})}
+            
             style={styles.rowFront}
             underlayColor={'#AAA'}
         >
             <View>
-                <Text>{data.item.text}</Text>
+                <Text>{data.item.courseName}</Text>
             </View>
         </TouchableHighlight>
-    );
+    )};
 
-    const renderHiddenItem = (data, rowMap) => (
+    const renderHiddenItem = (data, rowMap) => {
+        
+        return(
         <View style={[styles.rowBack]}>
             <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
             <Feather name="clipboard" size={22} color="black"></Feather>
                 Roster Register</Text>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                onPress={() => closeRow(rowMap, data.item.key)}
+                onPress={() => closeRow(rowMap, rowKey)}
             >
                 <Text style={styles.backTextWhite} onPress={()=> navigation.navigate("EditCourse")}>
                     <Feather name="edit" size={22} color="#7C808D"></Feather>
@@ -78,8 +80,8 @@ export default function CourseScreen({navigation}) {
                 style={[styles.backRightBtn, styles.backRightBtnRight]}
                 onPress={() => {
                     setVisible(true);
-                    setRowMap([rowMap, data.item.key]);
-                    setData([data.item.text])}}
+                    setPos([rowMap, data.item.key]);
+                    setData([data.item.courseName])}}
             >
                 <Text style={styles.backTextWhite}>
                 <Feather name="trash-2" size={22} color="#7C808D"></Feather>
@@ -87,7 +89,7 @@ export default function CourseScreen({navigation}) {
                     </Text>
             </TouchableOpacity>
         </View>
-    );
+    )};
     
     return (
         <Provider>
@@ -133,9 +135,8 @@ export default function CourseScreen({navigation}) {
                     title="Ok"
                     compact
                     variant="text"
-                    onPress={() => {deleteRow(rowMap[0],rowMap[1]);
-                        setVisible(false)}}
-                />
+                    onPress={() => {deleteRow(pos[0],pos[1]);
+                    setVisible(false)}}/>
                 </DialogActions>
             </Dialog>
         </Provider>

@@ -75,7 +75,7 @@ const Home = ({ navigation }) => {
                                           backgroundColor: '#F4F1F9'
                                       },
                                   ]}
-                                  key={item.id}
+                                  key={item.courseId}
                                   onPress={() => navigation.navigate('CourseDetail', { item: item })}
                               >
                                   <Image

@@ -1,0 +1,50 @@
+{
+    "httpStatusCode": 200,
+    "isSuccess": true,
+    "message": "",
+    "data": [
+      {
+        "id": 3,
+        "loginName": "vqt1hc",
+        "name": "Võ Quang Tường",
+        "email": "quangtuong100@gmail.com",
+        "password": null,
+        "telNum": "0339518617",
+        "isActive": true,
+        "userAPIs": [
+          {
+            "userId": 3,
+            "roleId": 2,
+            "user": null,
+            "role": null,
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "loginName": "QPQ12345",
+        "name": "Noo Thịnh",
+        "email": "voquangtuong185@gmail.com",
+        "password": null,
+        "telNum": "12345",
+        "isActive": true,
+        "userAPIs": [
+          {
+            "userId": 4,
+            "roleId": 1,
+            "user": null,
+            "role": null,
+            "isActive": true
+          },
+          {
+            "userId": 4,
+            "roleId": 2,
+            "user": null,
+            "role": null,
+            "isActive": false
+          }
+        ]
+      }
+    ]
+  }

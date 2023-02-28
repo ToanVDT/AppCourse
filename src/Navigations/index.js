@@ -16,6 +16,7 @@ import EditCourseScreen from '../Screens/Admin/EditCourseScreen';
 import RosterRegisterScreen from '../Screens/Admin/RosterRegisterScreen';
 
 
+
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
@@ -34,6 +35,7 @@ function AppNavigation() {
         <Stack.Screen name="AddCourse" component={AddCourseScreen} />
         <Stack.Screen name="EditCourse" component={EditCourseScreen} />
         <Stack.Screen name="RosterRegister" component={RosterRegisterScreen} />
+      
       </Stack.Navigator>
     </NavigationContainer>
     
