@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiURL } from "../config/config";
+import axiosInstance from "../context/helpers/axiosInstance.js";
 
 const checkExistedSendConfirmMail = async (
   id,
@@ -26,7 +27,6 @@ const checkExistedSendConfirmMail = async (
     console.log(error);
   }
 };
-
 const RegisterUser = async (
   id,
   loginName,
@@ -53,7 +53,6 @@ const RegisterUser = async (
     console.log(error);
   }
 };
-
 const SendForgetCode = async (email) => {
   try {
     const res = await axios.gett(
@@ -65,7 +64,6 @@ const SendForgetCode = async (email) => {
     console.log(error);
   }
 };
-
 const changePassword = async (loginUser, password) => {
   try {
     const res = await axios.post(
@@ -78,10 +76,9 @@ const changePassword = async (loginUser, password) => {
     console.log(error);
   }
 };
-
 const GetAllCourse = async (userId) => {
   try {
-    const res = await axios.get(
+    const res = await axiosInstance.get(
       `${apiURL}/api/User/get-all-course-for-home-page?userId=${userId}`
     );
     return res.data;
@@ -89,7 +86,6 @@ const GetAllCourse = async (userId) => {
     console.log(error);
   }
 };
-
 const EnrollCourse = async (
   userId,
   courseId,
@@ -108,7 +104,6 @@ const EnrollCourse = async (
       updatedDate,
       isActive
     );
-
     return res.data;
   } catch (error) {
     console.log(error);
@@ -122,7 +117,6 @@ const WithdrawCourse = async (userId, courseId) => {
       userId,
       courseId
     );
-
     return res.data;
   } catch (error) {
     console.log(error);
@@ -156,7 +150,6 @@ const CheckExistAndSendConfirmChangeMail = async (email) => {
     const res = await axios.get(
       `${apiURL}/api/User/check-existed-and-send-confirm-change-email?email=${email}`
     );
-
     return res.data;
   } catch (error) {
     console.log(error);

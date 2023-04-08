@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import { Feather } from "@expo/vector-icons";
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    TouchableHighlight,
-    View,
-} from 'react-native';
-import {
-  Provider,
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  DialogActions,
-  } from "@react-native-material/core";
+import { StyleSheet, Text, TouchableOpacity, TouchableHighlight, View,} from 'react-native';
+import { Provider, Button, Dialog, DialogHeader, DialogContent, DialogActions,} from "@react-native-material/core";
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { apiURL } from "../config/config";
 import { SwipeListView } from 'react-native-swipe-list-view';
-import Courses from "../data/AllCourseX.json";
-
-
+import { GetAllCourse } from '../Api/UserAPI.js';
 
 export default function CourseScreen({navigation}) {
     const [visible, setVisible] = useState(false);
     const [pos, setPos] = useState();
     const [data, setData] = useState();
-    const [listData, setListData] = useState(Courses.data);
-        
+    const [listData, setListData] = useState([]);
+    const getAllCourse = async()=>{
+        const res = await GetAllCourse("1")
+        if(res.isSuccess){
+            for (let data of res.data) {
+                data.imageName = data.imageName.split('\\').join('/');
+                data.imageName =apiURL+`/${data.imageName}`; 
+            }
+            setListData(res.data)
+        }
+        else{
+            console.log("res", res)
+        }
+      }
+      useEffect(() => {
+        getAllCourse();
+      }, []);    
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
             rowMap[rowKey].closeRow();
@@ -44,14 +44,11 @@ export default function CourseScreen({navigation}) {
         console.log('This row opened', rowKey);
     };
 
-    const renderItem = data => {
-        
+    const renderItem = data => {   
         return(
         <TouchableHighlight
-    
             key={data.item.courseId}
-            onPress={() => navigation.navigate('CourseDetail',{item:data.item})}
-            
+            onPress={() => navigation.navigate('CourseDetail',{item:data.item})}         
             style={styles.rowFront}
             underlayColor={'#AAA'}
         >
@@ -61,8 +58,7 @@ export default function CourseScreen({navigation}) {
         </TouchableHighlight>
     )};
 
-    const renderHiddenItem = (data, rowMap) => {
-        
+    const renderHiddenItem = (data, rowMap) => {       
         return(
         <View style={[styles.rowBack]}>
             {/* <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
@@ -143,8 +139,7 @@ export default function CourseScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        flex: 1,
-        
+        flex: 1,        
     },
     createCourse:{
         color: '#000',
@@ -196,6 +191,5 @@ const styles = StyleSheet.create({
         color:'white',
         backgroundColor: 'green',
         left: 0,
-    },
-    
+    },   
 });

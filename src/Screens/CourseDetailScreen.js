@@ -19,8 +19,6 @@ import { useState } from "react";
 export default function CourseDetailScreen({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
-  console.log(item);
-
   return (
     <>
       <View>
@@ -66,7 +64,7 @@ export default function CourseDetailScreen({ navigation }) {
             justifyContent: "space-between",
           }}
           resizeMode="contain"
-          source={item.imageName}
+          source={{uri:item.imageName}}
         ></ImageBackground>
         <View
           style={{

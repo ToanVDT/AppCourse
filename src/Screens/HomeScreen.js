@@ -12,10 +12,9 @@ import {
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Courses from "../data/AllCourseX.json";
 import {GetAllCourse} from "../Api/UserAPI";
 import { apiURL } from "../config/config";
-
+import jwt_decode from "jwt-decode";
 
 const { width } = Dimensions.get("window");
 
@@ -24,32 +23,27 @@ const SPACING = 10;
 const ITEM_WIDTH = width / 2 - SPACING * 3;
 
 const Home = ({ navigation }) => {
-  const [user, setUser] = useState('');
-
-  const[course, setCourse] = useState([]);
+  const [loginName, setLoginName] = useState('');
+  const [course, setCourse] = useState([]);
   
   const [activeCategory, setActiveCategory] = useState(0);
 
   const getAllCourse = async()=>{
-
-    const res = await GetAllCourse("1")
-
-    console.log("res test1",res)
-
-    if(res.isSuccess == true){
+    const authToken = await AsyncStorage.getItem('authToken');
+    const user = jwt_decode(authToken);
+    setLoginName(user.loginName)
+    const res = await GetAllCourse(user.id);
+    if(res.isSuccess){
         for (let data of res.data) {
             data.imageName = data.imageName.split('\\').join('/');
-            data.imageName =apiURL+`/${data.imageName}`; 
+            data.imageName = apiURL+`/${data.imageName}`; 
         }
-         setCourse(res.data)
+        setCourse(res.data)
     }
     else{
         console.log("res", res)
-
     }
   }
-
-  console.log("course",course)
   useEffect(() => {
     getAllCourse();
   }, []);
@@ -60,17 +54,8 @@ const Home = ({ navigation }) => {
               <View style={{ paddingHorizontal: SPACING * 2, paddingVertical: SPACING * 4 }}>
               <View style={{}}>
                   <Text
-                      style={{
-                          fontSize: 20,
-                          fontWeight: "400",
-                          color: '#000',
-                          backgroundColor:"#93FFE8",
-                          height:40,
-                          paddingLeft:15,
-                          marginVertical: SPACING * 2,
-                          fontWeight:"bold"
-                      }}>
-                      Home
+                      style={{ fontSize: 20, fontWeight: "400", color: '#000', backgroundColor:"#93FFE8", height:40, paddingLeft:15, marginVertical: SPACING * 2, fontWeight: "bold" }}>
+                      Hi {loginName} !
                   </Text>
                 </View>                
                   <View style={{ paddingVertical: 20 }}>
@@ -106,42 +91,20 @@ const Home = ({ navigation }) => {
                                   onPress={() => navigation.navigate('CourseDetail', { item: item })}
                               >
                                   <Image
-                                      style={{
-                                          width: "90%",
-                                          height: 120,
-                                          borderRadius: SPACING * 2,
-                                          resizeMode: 'contain',
-                                          alignItems: 'center',
-                                          position: 'relative',
-                                          top: -30
-                                      }}
+                                      style={{ width: "90%", height: 120, borderRadius: SPACING * 2, resizeMode: 'contain', alignItems: 'center', position: 'relative', top: -30 }}
                                       source={{uri:item.imageName}}
                                   />
                                   <View style={{
                                       position: 'relative',
                                       top: -15
                                   }}>
-                                      <Text
-                                          style={{
-                                              fontSize: SPACING * 2,
-                                              fontWeight: "700",
-                                          }}
-                                      >
+                                      <Text style={{ fontSize: SPACING * 2, fontWeight: "700", }}>
                                           {item.courseName}
                                       </Text>
-                                      <Text
-                                          style={{
-                                              fontSize: SPACING * 1.5,
-                                              color: 'rgb(120,120,120)',
-                                              marginVertical: SPACING / 2,
-                                          }}
-                                      >
+                                      <Text style={{ fontSize: SPACING * 1.5, color: 'rgb(120,120,120)', marginVertical: SPACING / 2, }} >
                                           {item.price}$
                                       </Text>
-                                      <Text style={{ 
-                                        fontSize: SPACING * 2, 
-                                        fontWeight: "700",
-                                        backgroundColor:"#B3D9D9" }} >
+                                      <Text style={{ fontSize: SPACING * 1.5, fontWeight: "700", backgroundColor:"#B3D9D9" }} >
                                           AVAILABLE: {item.availableSlot}
                                       </Text>
                                   </View>
