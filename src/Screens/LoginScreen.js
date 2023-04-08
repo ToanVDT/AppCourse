@@ -12,56 +12,41 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Login } from "../Api/AuthAPI";
 
 
 export default function LoginScreen({ navigation }) {
-//   const { setNotifi } = useContext(notifiContext);
-//   const { user, setUser } = useContext(userContext);
+  //   const { setNotifi } = useContext(notifiContext);
+  //   const { user, setUser } = useContext(userContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
-  // const goToHome = () => {
-  //   if (email.trim() == "" || !email) {
-  //     alert("Không được để trống email !");
-  //   } else if (password.trim() == "" || !password) {
-  //     alert("Không được để trống mật khẩu !");
-  //   } else {
-  //     handleLogin();
-  //   }
-  // };
-  // const handleLogin = async () => {
-  //   setLoading(true);
-  //   const res = await login(email.toLocaleLowerCase(), password);
-  //   console.log(res);
-  //   if (res.statusCode !== "200") {
-  //     //setNotifi([res.message, "error"]);
-  //     setLoading(false);
-  //     return;
-  //   }
-  //   await AsyncStorage.setItem("accessToken", res.data.accessToken);
-  //   await AsyncStorage.setItem("refreshToken", res.data.refreshToken);
-  //   setUser(res.data);
-  //   setLoading(false);
-  //  // navigation.navigate("HomeTab");
-  //   //setNotifi(["Đăng nhập thành công"]);
-  // };
+  const goToHome = () => {
+    if (email.trim() == "" || !email) {
+      alert("Không được để trống email !");
+    } else if (password.trim() == "" || !password) {
+      alert("Không được để trống mật khẩu !");
+    } else {
+      handleLogin();
+    }
+  };
 
-  // const checkLogin = async () => {
-  //   const refreshToken = await AsyncStorage.getItem("refreshToken");
-  //   const res = await loginByToken(refreshToken);
-  //   if (res.statusCode === "200") {
-  //     //navigation.navigate("HomeTab");
-  //     //setNotifi(["Đăng nhập thành công"]);
-  //   }
-  // };
-  // useEffect(() => {
-  //   checkLogin();
-  // }, []);
+  console.log("email", email, " pass", password)
+  const handleLogin = async () => {
+    const res = await Login(email, password);
+    console.log("res",res)
+
+    if (res.isSuccess == true) {
+      navigation.navigate("HomeTab");
+    } else console.log("User not found!");
+  };
+  useEffect(() => {
+    handleLogin();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -79,9 +64,7 @@ export default function LoginScreen({ navigation }) {
               fontWeight: "bold",
               top: -100,
             }}
-          >
-            
-          </Text>
+          ></Text>
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>Course</Text>
@@ -123,13 +106,20 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.forgotPasswordButton}>
-            <Text style={styles.forgotPasswordButtonText} 
-          
-            onPress={() => navigation.navigate("Forgot")}> Forgot password?</Text>
+            <Text
+              style={styles.forgotPasswordButtonText}
+              onPress={() => navigation.navigate("Forgot")}
+            >
+              {" "}
+              Forgot password?
+            </Text>
           </TouchableOpacity>
           {!loading ? (
-            //  onPress={goToHome}
-            <TouchableOpacity style={styles.loginButton} onPress={()=>navigation.navigate("HomeTab")}>
+        
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={goToHome}
+            >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
           ) : (
@@ -148,7 +138,7 @@ export default function LoginScreen({ navigation }) {
           >
             <Image
               style={styles.googleLogo}
-              source={require("../../../assets/google-logo.png")}
+              source={require("../../assets/google-logo.png")}
             />
             <Text style={styles.googleButtonText}>Sign in with Google</Text>
           </TouchableOpacity>
@@ -181,8 +171,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 100,
-    textAlign:"center",
-    color:"#3662AA",
+    textAlign: "center",
+    color: "#3662AA",
   },
   inputContainer: {
     flexDirection: "row",
@@ -252,7 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
   },
-  notifi:{
+  notifi: {
     backgroundColor: "#FFFFFF",
     padding: 14,
     borderRadius: 10,
@@ -266,7 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     textAlign: "center",
-
   },
   googleLogo: {
     width: 20.03,

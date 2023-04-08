@@ -53,21 +53,7 @@ export default function Profile({ navigation }) {
                 >
                     {user && user.email}
                 </Text>
-                <Text>
-                    Họ và tên: Đỗ Huy Mạnh
-                </Text>
-                <Text>
-                    Lớp: D15CNPM3
-                </Text>
-                <Text>
-                    Mã SV: 20810310319
-                </Text>
-                <Text>
-                    Sđt: 0362465647
-                </Text>
-                <Text>
-                    Địa chỉ: 235 Hoàng Quốc Việt
-                </Text>
+                
                 <View
                     style={{
                         flexDirection: "row",

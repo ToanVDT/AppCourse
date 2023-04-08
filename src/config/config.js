@@ -1,1 +1,1 @@
-export const apiURL ="https://api-comics.onrender.com";
+export const apiURL ="https://5900-171-249-154-249.ap.ngrok.io";
