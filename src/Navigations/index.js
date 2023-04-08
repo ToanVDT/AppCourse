@@ -1,21 +1,14 @@
 import React from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import HomeScreen from '../Screens/HomeScreen';
 import CourseScreen from '../Screens/CourseScreen';
 import ProfileScreen from '../Screens/ProfileScreen';
 import LoginScreen from '../Screens/LoginScreen';
 import RegisterScreen from '../Screens/RegisterScreen';
 import ForgotPasswordScreen from '../Screens/ForgotPasswordScreen';
-
 import CourseDetailScreen from '../Screens/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
-
-
-
-
-
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
@@ -29,8 +22,7 @@ function AppNavigation() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Forgot" component={ForgotPasswordScreen} />
         <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
-        <Stack.Screen name="HomeTab" component={BottomTabNavigator} />
-      
+        <Stack.Screen name="HomeTab" component={BottomTabNavigator} />     
       </Stack.Navigator>
     </NavigationContainer>
     

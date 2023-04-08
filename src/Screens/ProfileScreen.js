@@ -1,24 +1,24 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, Image, TouchableOpacity } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from "jwt-decode";
 export default function Profile({ navigation }) {
-    const [user, setuser] = useState(null);
-    // const getUserData = async () => {
-    //     let curUser = await AsyncStorage.getItem("curUser");
-    //     curUser = JSON.parse(curUser);
-    //     setuser(curUser);
-    // };
-    // const logOut = async () => {
-    //     await AsyncStorage.removeItem("curUser");
-    //     navigation.reset({
-    //         index: 0,
-    //         routes: [{ name: "Login" }],
-    //     });
-    // };
-    // useEffect(() => {
-    //     getUserData(user);
-    // }, []);
+    const [user, setUser] = useState(null);
+    const getUserData = async () => {
+        const authToken = await AsyncStorage.getItem('authToken');
+        const user = jwt_decode(authToken);
+        setUser(user.loginName);
+    };
+    const logOut = async () => {
+        await AsyncStorage.removeItem("authToken");
+        navigation.reset({
+            index: 0,
+            routes: [{ name: "Login" }],
+        });
+    };
+    useEffect(() => {
+        getUserData();
+    }, []);
     return (
         <View
             style={{
@@ -44,7 +44,7 @@ export default function Profile({ navigation }) {
                         fontWeight: "bold",
                     }}
                 >
-                    {user && user.name}
+                    {user}
                 </Text>
                 <Text
                     style={{
@@ -102,7 +102,7 @@ export default function Profile({ navigation }) {
               top: 200 , 
               padding: 15, 
               borderRadius: 20, 
-              marginVertical: 50 }} onPress={()=>navigation.navigate("Login")}>
+              marginVertical: 50 }} onPress={()=> logOut()}>
               {/* onPress={logOut} */}
                 <Text>LogOut</Text>
             </TouchableOpacity>

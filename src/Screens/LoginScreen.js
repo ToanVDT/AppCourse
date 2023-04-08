@@ -1,20 +1,12 @@
+// @ts-ignore
 import { StatusBar } from "expo-status-bar";
+// @ts-ignore
 import { Feather } from "@expo/vector-icons";
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from "react-native";
+// @ts-ignore
+import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, AsyncStorage} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import { Login } from "../Api/AuthAPI";
-
-
+import { checkValidToken, Login } from "../Api/AuthAPI";
+import jwt_decode from "jwt-decode";
 export default function LoginScreen({ navigation }) {
   //   const { setNotifi } = useContext(notifiContext);
   //   const { user, setUser } = useContext(userContext);
@@ -24,7 +16,7 @@ export default function LoginScreen({ navigation }) {
 
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
-  const goToHome = () => {
+  const login = () => {
     if (email.trim() == "" || !email) {
       alert("Không được để trống email !");
     } else if (password.trim() == "" || !password) {
@@ -34,17 +26,40 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  console.log("email", email, " pass", password)
   const handleLogin = async () => {
     const res = await Login(email, password);
-    console.log("res",res)
-
     if (res.isSuccess == true) {
+      await AsyncStorage.setItem('authToken', res.data);
       navigation.navigate("HomeTab");
-    } else console.log("User not found!");
+    } else alert(res.data);
+  };
+
+  const checkValidTokenFunction = async () => {
+    const authToken = await AsyncStorage.getItem('authToken');
+    if (authToken != undefined) {
+      const userInfo = jwt_decode(authToken);
+      const expiryDate = userInfo.expires;
+      const dateNow = new Date();
+      //const dateNow = new Date("2023-05-12T23:50:21.817Z"); //uncomment for testing refresh token
+      if (dateNow > new Date(expiryDate)) {
+        const res = await checkValidToken(userInfo.loginName);
+        if (res.isSuccess == true) {
+          await AsyncStorage.setItem('authToken', res.data);
+          alert('Refreshed auth token successfully');
+          navigation.navigate("HomeTab");
+        }
+        else {
+          alert('Auto login fail, please manually login again!');
+        }
+      }
+      else {
+        alert('Auto login successfully');
+        navigation.navigate("HomeTab");
+      }
+    }
   };
   useEffect(() => {
-    handleLogin();
+    checkValidTokenFunction();
   }, []);
 
   return (
@@ -118,7 +133,7 @@ export default function LoginScreen({ navigation }) {
         
             <TouchableOpacity
               style={styles.loginButton}
-              onPress={goToHome}
+              onPress={login}
             >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
@@ -138,6 +153,7 @@ export default function LoginScreen({ navigation }) {
           >
             <Image
               style={styles.googleLogo}
+              // @ts-ignore
               source={require("../../assets/google-logo.png")}
             />
             <Text style={styles.googleButtonText}>Sign in with Google</Text>
