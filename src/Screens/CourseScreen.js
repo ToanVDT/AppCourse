@@ -18,7 +18,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
-import Courses from "../../data/AllCourseX.json";
+import Courses from "../data/AllCourseX.json";
 
 
 
@@ -65,9 +65,9 @@ export default function CourseScreen({navigation}) {
         
         return(
         <View style={[styles.rowBack]}>
-            <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
+            {/* <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
             <Feather name="clipboard" size={22} color="black"></Feather>
-                Roster Register</Text>
+                Roster Register</Text> */}
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
                 onPress={() => closeRow(rowMap, rowKey)}
@@ -100,11 +100,8 @@ export default function CourseScreen({navigation}) {
                 fontSize:20,
                 fontWeight:"bold",
                 paddingLeft:15,
-                padingTop:20}}>Manager Course</Text>
+                padingTop:20}}>Khóa đã đăng ký</Text>
           </View>
-          <Button title="Add Course" style={{backgroundColor:"green",marginTop:"5%",width:"35%", marginLeft:"2%"}}
-          onPress={()=> navigation.navigate("AddCourse")}>
-            </Button> 
             <SwipeListView              
                 data={listData}
                 renderItem={renderItem}

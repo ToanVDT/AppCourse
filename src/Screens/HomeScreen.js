@@ -12,7 +12,9 @@ import {
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Courses from "../../data/AllCourseX.json";
+import Courses from "../data/AllCourseX.json";
+import {GetAllCourse} from "../Api/UserAPI";
+import { apiURL } from "../config/config";
 
 
 const { width } = Dimensions.get("window");
@@ -23,9 +25,34 @@ const ITEM_WIDTH = width / 2 - SPACING * 3;
 
 const Home = ({ navigation }) => {
   const [user, setUser] = useState('');
+
+  const[course, setCourse] = useState([]);
   
   const [activeCategory, setActiveCategory] = useState(0);
 
+  const getAllCourse = async()=>{
+
+    const res = await GetAllCourse("1")
+
+    console.log("res test1",res)
+
+    if(res.isSuccess == true){
+        for (let data of res.data) {
+            data.imageName = data.imageName.split('\\').join('/');
+            data.imageName =apiURL+`/${data.imageName}`; 
+        }
+         setCourse(res.data)
+    }
+    else{
+        console.log("res", res)
+
+    }
+  }
+
+  console.log("course",course)
+  useEffect(() => {
+    getAllCourse();
+  }, []);
 
   return (
       <SafeAreaView style={{ backgroundColor: '#fff' }}>
@@ -55,7 +82,7 @@ const Home = ({ navigation }) => {
                               justifyContent: "space-between",
                               marginVertical: SPACING * 2,
                           }}>
-                          {Courses.data.map((item, i) => (
+                          {course.map((item, i) => (
                               <TouchableOpacity
                                   style={[
                                       {
@@ -88,7 +115,7 @@ const Home = ({ navigation }) => {
                                           position: 'relative',
                                           top: -30
                                       }}
-                                      source={item.imageName}
+                                      source={{uri:item.imageName}}
                                   />
                                   <View style={{
                                       position: 'relative',
@@ -115,7 +142,7 @@ const Home = ({ navigation }) => {
                                         fontSize: SPACING * 2, 
                                         fontWeight: "700",
                                         backgroundColor:"#B3D9D9" }} >
-                                          AVAILABLE: {item.classCapacity}
+                                          AVAILABLE: {item.availableSlot}
                                       </Text>
                                   </View>
                               </TouchableOpacity>
