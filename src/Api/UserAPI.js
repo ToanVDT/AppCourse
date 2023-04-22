@@ -1,3 +1,4 @@
+// @ts-ignore
 import axios from "axios";
 import { apiURL } from "../config/config";
 import axiosInstance from "../context/helpers/axiosInstance.js";
@@ -95,16 +96,17 @@ const EnrollCourse = async (
   isActive
 ) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/enroll-course`,
-      userId,
+      {userId,
       courseId,
       registerStatus,
       createdDate,
       updatedDate,
-      isActive
+      isActive}
     );
-    return res.data;
+    console.log(res.data.message);
+    return res.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -112,12 +114,12 @@ const EnrollCourse = async (
 
 const WithdrawCourse = async (userId, courseId) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/withdraw-course`,
-      userId,
-      courseId
+     { userId,
+      courseId}
     );
-    return res.data;
+    return res.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -125,7 +127,7 @@ const WithdrawCourse = async (userId, courseId) => {
 
 const GetJoiningCourse = async (userId) => {
   try {
-    const res = await axios.get(
+    const res = await axiosInstance.get(
       `${apiURL}/api/User/get-joining-course?userId=${userId}`
     );
     return res.data;
@@ -135,9 +137,9 @@ const GetJoiningCourse = async (userId) => {
 };
 
 const GetInfoUser = async (userId) => {
+  // var headers = { 'content-type': 'application/json'}
   try {
-    const res = await axios.get(
-      `${apiURL}/api/User/get-info-user?userId=${userId}`
+    const res = await axiosInstance.get(`${apiURL}/api/User/get-info-user?userId=${userId}`
     );
     return res.data;
   } catch (error) {

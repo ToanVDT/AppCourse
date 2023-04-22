@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Ionicons } from "@expo/vector-icons";
+// @ts-ignore
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GetAllCourse} from "../Api/UserAPI";
 import { apiURL } from "../config/config";
@@ -22,12 +22,12 @@ const SPACING = 10;
 
 const ITEM_WIDTH = width / 2 - SPACING * 3;
 
-const Home = ({ navigation }) => {
+export default function Home({ navigation }) {
   const [loginName, setLoginName] = useState('');
   const [course, setCourse] = useState([]);
   
   const [activeCategory, setActiveCategory] = useState(0);
-
+  console.log("home")
   const getAllCourse = async()=>{
     const authToken = await AsyncStorage.getItem('authToken');
     const user = jwt_decode(authToken);
@@ -117,7 +117,5 @@ const Home = ({ navigation }) => {
       </SafeAreaView>
   );
 };
-
-export default Home;
 
 const styles = StyleSheet.create({});

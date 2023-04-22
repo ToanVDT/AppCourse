@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -9,16 +9,59 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
+// @ts-ignore
+import jwt_decode from "jwt-decode";
+// @ts-ignore
 import { useRoute } from "@react-navigation/native";
+import moment from "../../node_modules/moment/moment";
 const SPACING = 10;
 const { height } = Dimensions.get("window");
+// @ts-ignore
 import { Ionicons } from "@expo/vector-icons";
+// @ts-ignore
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useState } from "react";
+import { EnrollCourse, WithdrawCourse } from "../Api/UserAPI";
 
 export default function CourseDetailScreen({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
+  const [registerStatus, setRegisterStatus] = useState("Reserved");
+  const [isActive, setIsActive] = useState(true);
+
+  console.log("item", item);
+  const date = new Date();
+
+  const HandleEnrollCourse = async () => {
+    const authToken = await AsyncStorage.getItem("authToken");
+
+    if (authToken != undefined) {
+      const user = jwt_decode(authToken);
+      const res = await EnrollCourse(
+        user.id,
+        item.courseId,
+        registerStatus,
+        date,
+        date,
+        isActive
+      );
+      alert(res);
+    }
+  };
+  const HandleWithdrawCourse = async () => {
+    const authToken = await AsyncStorage.getItem("authToken");
+
+    if (authToken != undefined) {
+      const user = jwt_decode(authToken);
+      const res = await WithdrawCourse(
+        user.id,
+        item.courseId
+      );
+      alert(res);
+    }
+  };
+
   return (
     <>
       <View>
@@ -58,13 +101,14 @@ export default function CourseDetailScreen({ navigation }) {
           style={{
             padding: SPACING * 2,
             height: height / 2.5,
+            // @ts-ignore
             padding: SPACING * 2,
             paddingTop: SPACING * 4,
             flexDirection: "row",
             justifyContent: "space-between",
           }}
           resizeMode="contain"
-          source={{uri:item.imageName}}
+          source={{ uri: item.imageName }}
         ></ImageBackground>
         <View
           style={{
@@ -78,34 +122,42 @@ export default function CourseDetailScreen({ navigation }) {
             backgroundColor: "#fff",
           }}
         >
-          <Text style={{ fontSize: 15 }}>Course Name:{item.courseName} </Text>
-          <Text style={{ fontSize: 15 }}>Type:{item.type}</Text>
-          <Text style={{ fontSize: 15 }}>Location:{item.location}</Text>
-          <Text style={{ fontSize: 15 }}>Start time:{item.startTime}</Text>
-          <Text style={{ fontSize: 15 }}>
-            Registation Closed Date:{item.lastDateToRegister}
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            Course Name:{item.courseName}{" "}
           </Text>
-          <Text style={{ fontSize: 15 }}>
-            Last Time To Withdraw:{item.lastDateToWithdraw}
+          <Text style={{ fontSize: 16 }}>Type:{item.type}</Text>
+          <Text style={{ fontSize: 16 }}>Location:{item.location}</Text>
+          <Text style={{ fontSize: 16 }}>
+            Start time: {moment(item.startTime).format("DD-MM-YYYY")}
           </Text>
-          <Text style={{ fontSize: 15 }}>End Time:{item.endTime}</Text>
-          <Text style={{ fontSize: 15 }}>Price:{item.price}$</Text>
-          <Text style={{ fontSize: 15 }}>
+          <Text style={{ fontSize: 16 }}>
+            Registation Closed Date:{" "}
+            {moment(item.lastDateToRegister).format("DD-MM-YYYY ")}
+          </Text>
+          <Text style={{ fontSize: 16 }}>
+            Last Time To Withdraw:{" "}
+            {moment(item.lastDateToWithdraw).format("DD-MM-YYYY ")}
+          </Text>
+          <Text style={{ fontSize: 16 }}>
+            End Time: {moment(item.endTime).format("DD-MM-YYYY")}
+          </Text>
+          <Text style={{ fontSize: 16 }}>Price:{item.price}$</Text>
+          <Text style={{ fontSize: 16 }}>
             Available Capacity:{item.classCapacity}
           </Text>
-          <Text style={{ fontSize: 15 }}>Description:{item.description}</Text>
+          <Text style={{ fontSize: 16 }}>Description:{item.description}</Text>
         </View>
 
         <View style={styles.fixToText}>
           <Button
             title="Đăng ký"
-            color="#841584"
-            onPress={() => Alert.alert("Nút Đăng Ký")}
+            color="#841684"
+            onPress={() => HandleEnrollCourse()}
           />
           <Button
             title="Hủy"
             color="#ed2718"
-            onPress={() => Alert.alert("Nút Hủy")}
+            onPress={() => HandleWithdrawCourse()}
           />
         </View>
       </View>
