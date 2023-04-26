@@ -1,9 +1,10 @@
+// @ts-ignore
 import axios from "axios";
 import { apiURL } from "../config/config";
 import axiosInstance from "../context/helpers/axiosInstance.js";
 
 const checkExistedSendConfirmMail = async (
-  id,
+ 
   loginName,
   name,
   password,
@@ -14,13 +15,13 @@ const checkExistedSendConfirmMail = async (
   try {
     const res = await axios.post(
       `${apiURL}/api/User/check-existed-and-send-confirm-mail`,
-      id,
+      {
       loginName,
       name,
       password,
       telNum,
       email,
-      isActive
+      isActive}
     );
     return res.data;
   } catch (error) {
@@ -28,7 +29,7 @@ const checkExistedSendConfirmMail = async (
   }
 };
 const RegisterUser = async (
-  id,
+
   loginName,
   name,
   password,
@@ -39,13 +40,13 @@ const RegisterUser = async (
   try {
     const res = await axios.post(
       `${apiURL}/api/User/register-user`,
-      id,
+     {
       loginName,
       name,
       password,
       telNum,
       email,
-      isActive
+      isActive}
     );
 
     return res.data;
@@ -68,8 +69,8 @@ const changePassword = async (loginUser, password) => {
   try {
     const res = await axios.post(
       `${apiURL}/api/User/change-password`,
-      loginUser,
-      password
+     { loginUser,
+      password}
     );
     return res.data;
   } catch (error) {
@@ -95,16 +96,17 @@ const EnrollCourse = async (
   isActive
 ) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/enroll-course`,
-      userId,
+      {userId,
       courseId,
       registerStatus,
       createdDate,
       updatedDate,
-      isActive
+      isActive}
     );
-    return res.data;
+    console.log(res.data.message);
+    return res.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -112,12 +114,12 @@ const EnrollCourse = async (
 
 const WithdrawCourse = async (userId, courseId) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/withdraw-course`,
-      userId,
-      courseId
+     { userId,
+      courseId}
     );
-    return res.data;
+    return res.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -125,7 +127,7 @@ const WithdrawCourse = async (userId, courseId) => {
 
 const GetJoiningCourse = async (userId) => {
   try {
-    const res = await axios.get(
+    const res = await axiosInstance.get(
       `${apiURL}/api/User/get-joining-course?userId=${userId}`
     );
     return res.data;
@@ -135,9 +137,9 @@ const GetJoiningCourse = async (userId) => {
 };
 
 const GetInfoUser = async (userId) => {
+  // var headers = { 'content-type': 'application/json'}
   try {
-    const res = await axios.get(
-      `${apiURL}/api/User/get-info-user?userId=${userId}`
+    const res = await axiosInstance.get(`${apiURL}/api/User/get-info-user?userId=${userId}`
     );
     return res.data;
   } catch (error) {
@@ -147,7 +149,7 @@ const GetInfoUser = async (userId) => {
 
 const CheckExistAndSendConfirmChangeMail = async (email) => {
   try {
-    const res = await axios.get(
+    const res = await axiosInstance.get(
       `${apiURL}/api/User/check-existed-and-send-confirm-change-email?email=${email}`
     );
     return res.data;
@@ -158,13 +160,13 @@ const CheckExistAndSendConfirmChangeMail = async (email) => {
 
 const UpdateProfile = async (id, loginName, name, email, telNum) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/update-profile`,
-      id,
+      {id,
       loginName,
       name,
       email,
-      telNum
+      telNum}
     );
 
     return res.data;

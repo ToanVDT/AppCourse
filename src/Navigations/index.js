@@ -9,6 +9,7 @@ import RegisterScreen from '../Screens/RegisterScreen';
 import ForgotPasswordScreen from '../Screens/ForgotPasswordScreen';
 import CourseDetailScreen from '../Screens/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
+import PopUp from "../Components/PopUP";
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
@@ -22,7 +23,8 @@ function AppNavigation() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Forgot" component={ForgotPasswordScreen} />
         <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
-        <Stack.Screen name="HomeTab" component={BottomTabNavigator} />     
+        <Stack.Screen name="HomeTab" component={BottomTabNavigator} />   
+        <Stack.Screen name="PopUp" component = {PopUp} />
       </Stack.Navigator>
     </NavigationContainer>
     
