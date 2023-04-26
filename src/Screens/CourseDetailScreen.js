@@ -27,9 +27,11 @@ import { EnrollCourse, WithdrawCourse } from "../Api/UserAPI";
 export default function CourseDetailScreen({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
+  const [stateButton,setStateButton] = useState(item.registerStatus ===null)
   const [registerStatus, setRegisterStatus] = useState("Reserved");
   const [isActive, setIsActive] = useState(true);
 
+  const [isDisabled, setIsDisabled] = useState(true);
   console.log("item", item);
   const date = new Date();
 
@@ -46,6 +48,7 @@ export default function CourseDetailScreen({ navigation }) {
         date,
         isActive
       );
+      setStateButton(state => !state)
       alert(res);
     }
   };
@@ -54,10 +57,8 @@ export default function CourseDetailScreen({ navigation }) {
 
     if (authToken != undefined) {
       const user = jwt_decode(authToken);
-      const res = await WithdrawCourse(
-        user.id,
-        item.courseId
-      );
+      const res = await WithdrawCourse(user.id, item.courseId);
+      setStateButton(state => !state)
       alert(res);
     }
   };
@@ -150,13 +151,15 @@ export default function CourseDetailScreen({ navigation }) {
 
         <View style={styles.fixToText}>
           <Button
-            title="Đăng ký"
-            color="#841684"
+            title={stateButton ===true ? "Enroll":"Enrolled"}
+            disabled={stateButton ===true? !isDisabled : isDisabled}
+            color={stateButton ===true ? "#841684" : "#CCCCCC"}
             onPress={() => HandleEnrollCourse()}
           />
           <Button
-            title="Hủy"
-            color="#ed2718"
+            title="Withdraw"
+            disabled={stateButton ===true ? isDisabled : !isDisabled}
+            color={stateButton === true ? "#CCCCCC" : "#ed2718"}
             onPress={() => HandleWithdrawCourse()}
           />
         </View>

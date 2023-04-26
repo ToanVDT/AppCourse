@@ -1,14 +1,11 @@
 import React from "react";
-// @ts-ignore
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "../Screens/HomeScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import CourseScreen from "../Screens/CourseScreen";
 
-// @ts-ignore
 import { FontAwesome5 } from "@expo/vector-icons";
-// @ts-ignore
 import { View, Platform } from "react-native";
 
 const Tab = createBottomTabNavigator();
@@ -19,7 +16,8 @@ function BottomTabNavigators() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
+        unmountOnBlur:true,
+        tabBarShowLabel: true,
         tabBarStyle: {
           backgroundColor: "white",
           position: "absolute",

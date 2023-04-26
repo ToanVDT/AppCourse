@@ -4,7 +4,7 @@ import { apiURL } from "../config/config";
 import axiosInstance from "../context/helpers/axiosInstance.js";
 
 const checkExistedSendConfirmMail = async (
-  id,
+ 
   loginName,
   name,
   password,
@@ -15,13 +15,13 @@ const checkExistedSendConfirmMail = async (
   try {
     const res = await axios.post(
       `${apiURL}/api/User/check-existed-and-send-confirm-mail`,
-      id,
+      {
       loginName,
       name,
       password,
       telNum,
       email,
-      isActive
+      isActive}
     );
     return res.data;
   } catch (error) {
@@ -29,7 +29,7 @@ const checkExistedSendConfirmMail = async (
   }
 };
 const RegisterUser = async (
-  id,
+
   loginName,
   name,
   password,
@@ -40,13 +40,13 @@ const RegisterUser = async (
   try {
     const res = await axios.post(
       `${apiURL}/api/User/register-user`,
-      id,
+     {
       loginName,
       name,
       password,
       telNum,
       email,
-      isActive
+      isActive}
     );
 
     return res.data;
@@ -69,8 +69,8 @@ const changePassword = async (loginUser, password) => {
   try {
     const res = await axios.post(
       `${apiURL}/api/User/change-password`,
-      loginUser,
-      password
+     { loginUser,
+      password}
     );
     return res.data;
   } catch (error) {
@@ -149,7 +149,7 @@ const GetInfoUser = async (userId) => {
 
 const CheckExistAndSendConfirmChangeMail = async (email) => {
   try {
-    const res = await axios.get(
+    const res = await axiosInstance.get(
       `${apiURL}/api/User/check-existed-and-send-confirm-change-email?email=${email}`
     );
     return res.data;
@@ -160,13 +160,13 @@ const CheckExistAndSendConfirmChangeMail = async (email) => {
 
 const UpdateProfile = async (id, loginName, name, email, telNum) => {
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${apiURL}/api/User/update-profile`,
-      id,
+      {id,
       loginName,
       name,
       email,
-      telNum
+      telNum}
     );
 
     return res.data;

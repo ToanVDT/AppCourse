@@ -65,7 +65,7 @@ export default function CourseScreen({ navigation }) {
             margin: "7%",
             // borderRadius: 2,
             backgroundColor: "#DDDDDD",
-            height: "10%",
+            height: "14%",
             marginTop:-10,
           }}
           key={i}
