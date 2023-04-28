@@ -30,7 +30,7 @@ export default function CourseDetailScreen({ navigation }) {
   const [stateButton,setStateButton] = useState(item.registerStatus ===null)
   const [registerStatus, setRegisterStatus] = useState("Reserved");
   const [isActive, setIsActive] = useState(true);
-
+  const [showBox, setShowBox] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
   console.log("item", item);
   const date = new Date();
@@ -61,6 +61,25 @@ export default function CourseDetailScreen({ navigation }) {
       setStateButton(state => !state)
       alert(res);
     }
+  };
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Are your sure?",
+      "Are you sure you want to withdraw this course?",
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+            HandleWithdrawCourse();
+            setShowBox(false);
+          },
+        },
+
+        {
+          text: "No",
+        },
+      ]
+    );
   };
 
   return (
@@ -160,7 +179,7 @@ export default function CourseDetailScreen({ navigation }) {
             title="Withdraw"
             disabled={stateButton ===true ? isDisabled : !isDisabled}
             color={stateButton === true ? "#CCCCCC" : "#ed2718"}
-            onPress={() => HandleWithdrawCourse()}
+            onPress={() => showConfirmDialog()}
           />
         </View>
       </View>

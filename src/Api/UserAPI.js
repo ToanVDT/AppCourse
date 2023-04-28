@@ -10,7 +10,7 @@ const checkExistedSendConfirmMail = async (
   password,
   telNum,
   email,
-  isActive
+
 ) => {
   try {
     const res = await axios.post(
@@ -21,9 +21,11 @@ const checkExistedSendConfirmMail = async (
       password,
       telNum,
       email,
-      isActive}
+   }
     );
+    console.log("API call",res.data)
     return res.data;
+    
   } catch (error) {
     console.log(error);
   }
@@ -35,7 +37,7 @@ const RegisterUser = async (
   password,
   telNum,
   email,
-  isActive
+
 ) => {
   try {
     const res = await axios.post(
@@ -46,7 +48,7 @@ const RegisterUser = async (
       password,
       telNum,
       email,
-      isActive}
+    }
     );
 
     return res.data;
@@ -56,10 +58,11 @@ const RegisterUser = async (
 };
 const SendForgetCode = async (email) => {
   try {
-    const res = await axios.gett(
+    const res = await axios.get(
       `${apiURL}/api/User/send-forget-code?email=${email}`
     );
 
+    console.log("API call ",res.data)
     return res.data;
   } catch (error) {
     console.log(error);

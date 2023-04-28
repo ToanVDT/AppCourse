@@ -95,8 +95,12 @@ export default function Profile({ navigation }) {
         email,
         numberphone
       );
+
       if(res.data){
         alert("Successful")
+        if(info.loginName != username){
+          navigation.navigate("Login")
+        }
       }
       else{
         alert("Error")

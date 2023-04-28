@@ -20,20 +20,21 @@ export default function RegisterScreen({ navigation }) {
   const [fullname, setFullName] = useState("");
   const [teleNum, setTeleNum] = useState("");
   const [isActive, setIsActive] = useState(true);
+  
 
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
   const onSignUp = () => {
     if (loginName.trim() == "" || !loginName) {
-      alert("Không được để trống tên đăng nhập !");
+      alert("Can not blank loginName !");
     } else if (fullname.trim() == "" || !fullname) {
-      alert("Không được để trống họ và tên !");
+      alert("Can not blank fullname !");
     } else if (email.trim() == "" || !email) {
-      alert("Không được để trống email !");
+      alert("Can not blank email !");
     } else if (teleNum.trim() == "" || !teleNum) {
-      alert("Không được để trống số điện thoại !");
+      alert("Can not blank telephone number !");
     } else if (password.trim() == "" || !password) {
-        alert("Không được để trống mật khẩu !");
+        alert("Can not blank password !");
     } else {
      
         createAccount();
@@ -41,8 +42,18 @@ export default function RegisterScreen({ navigation }) {
     }
   };
   const createAccount = async () => {
-    const res = checkExistedSendConfirmMail(loginName,fullname,password,teleNum,email)
-   console.log("ress",res)
+    const res = await checkExistedSendConfirmMail(loginName,fullname,password,teleNum,email)
+    const codeConfirm = res.data
+    // console.log(loginName,fullname,password,teleNum,email)
+    if(res.data !="existed"){
+      alert("Confirm change email code was sent!")
+        navigation.navigate("PopUpRegister",{ loginName:loginName,fullname:fullname,password:password,teleNum:teleNum,email:email,codeConfirm:codeConfirm })
+
+      } else {
+        alert("Existed Login Name or Email, try again!");
+      }
+    
+
     
     // navigation.goBack();
   };

@@ -9,7 +9,9 @@ import RegisterScreen from '../Screens/RegisterScreen';
 import ForgotPasswordScreen from '../Screens/ForgotPasswordScreen';
 import CourseDetailScreen from '../Screens/CourseDetailScreen';
 import BottomTabNavigator from './BottomTabNavigators';
-import PopUp from "../Components/PopUP";
+import PopUp from "../Components/PopUp";
+import PopUpRegister from "../Components/PopUpRegister";
+import PopUpNewPassword from "../Components/PopUpNewPassword";
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
@@ -25,6 +27,8 @@ function AppNavigation() {
         <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
         <Stack.Screen name="HomeTab" component={BottomTabNavigator} />   
         <Stack.Screen name="PopUp" component = {PopUp} />
+        <Stack.Screen name="PopUpRegister" component = {PopUpRegister} />
+        <Stack.Screen name="PopUpNewPassword" component = {PopUpNewPassword} />
       </Stack.Navigator>
     </NavigationContainer>
     
