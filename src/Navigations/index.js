@@ -12,6 +12,7 @@ import BottomTabNavigator from './BottomTabNavigators';
 import PopUp from "../Components/PopUp";
 import PopUpRegister from "../Components/PopUpRegister";
 import PopUpNewPassword from "../Components/PopUpNewPassword";
+import PopUpFeedback from "../Components/PopUpFeedback";
 const Stack = createNativeStackNavigator();
 
 function AppNavigation() {
@@ -29,6 +30,7 @@ function AppNavigation() {
         <Stack.Screen name="PopUp" component = {PopUp} />
         <Stack.Screen name="PopUpRegister" component = {PopUpRegister} />
         <Stack.Screen name="PopUpNewPassword" component = {PopUpNewPassword} />
+        <Stack.Screen name="PopUpFeedback" component = {PopUpFeedback} />
       </Stack.Navigator>
     </NavigationContainer>
     
