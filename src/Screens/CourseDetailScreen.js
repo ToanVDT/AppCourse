@@ -21,20 +21,55 @@ import { Ionicons } from "@expo/vector-icons";
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useState } from "react";
-import { EnrollCourse, WithdrawCourse } from "../Api/UserAPI";
-
+import { useEffect, useState } from "react";
+import { EnrollCourse, WithdrawCourse, getCourseById } from "../Api/UserAPI";
+import { apiURL } from "../config/config";
 export default function CourseDetailScreen({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
-  const [stateButton,setStateButton] = useState(item.registerStatus ===null)
+  
   const [registerStatus, setRegisterStatus] = useState("Reserved");
   const [isActive, setIsActive] = useState(true);
   const [showBox, setShowBox] = useState(true);
+  const [courseData, setCourseData] = useState({});
+  const [stateEnroll, setStateEnroll] = useState(false);
+  const [stateWithdraw, setStateWithdraw] = useState(false);
+  const [stateFeedback, setStateFeedback] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   console.log("item", item);
   const date = new Date();
 
+  const handleButton = (button) =>  {
+    setStateEnroll(false);
+    setStateWithdraw(false);
+    setStateFeedback(false);
+    console.log('dasjhdkaj')
+    switch(button){
+      case 'Enroll':
+        setStateEnroll(true);        
+        break;
+      case 'Withdraw':
+        setStateWithdraw(true);
+        break;
+      case 'Feedback':
+        setStateFeedback(true);
+        break;   
+    }
+  }
+
+  const courseById = async () => {
+    const authToken = await AsyncStorage.getItem("authToken");
+
+    if (authToken != undefined) {
+      const user = jwt_decode(authToken);
+      const res = await getCourseById(item.courseId, user.id);
+      res.data.imageName = res.data.imageName.split('\\').join('/');
+      res.data.imageName = apiURL+`/${res.data.imageName}`; 
+      setCourseData(res.data);    
+      console.log("resdata",res.data)
+      handleButton(res.data.button);
+    }
+  };
   const HandleEnrollCourse = async () => {
     const authToken = await AsyncStorage.getItem("authToken");
 
@@ -42,14 +77,14 @@ export default function CourseDetailScreen({ navigation }) {
       const user = jwt_decode(authToken);
       const res = await EnrollCourse(
         user.id,
-        item.courseId,
+        courseData.courseId,
         registerStatus,
         date,
         date,
         isActive
-      );
-      setStateButton(state => !state)
+      );   
       alert(res);
+      courseById();
     }
   };
   const HandleWithdrawCourse = async () => {
@@ -57,11 +92,17 @@ export default function CourseDetailScreen({ navigation }) {
 
     if (authToken != undefined) {
       const user = jwt_decode(authToken);
-      const res = await WithdrawCourse(user.id, item.courseId);
-      setStateButton(state => !state)
+      const res = await WithdrawCourse(user.id, courseData.courseId);
       alert(res);
+      courseById();
     }
   };
+  const HandleFeedback = async()=>{
+
+    navigation.navigate("PopUpFeedback",{courseId:courseData.courseId})
+    handleButton('Feedback')
+    }
+  
   const showConfirmDialog = () => {
     return Alert.alert(
       "Are your sure?",
@@ -81,6 +122,13 @@ export default function CourseDetailScreen({ navigation }) {
       ]
     );
   };
+const loadData = async()=>{
+   console.log('courseData',courseData?.button)
+    handleButton(courseData?.button);
+}
+  useEffect(() => {
+    courseById();
+  }, []);
 
   return (
     <>
@@ -112,7 +160,7 @@ export default function CourseDetailScreen({ navigation }) {
               borderRadius: SPACING * 2.5,
               marginTop: -45,
             }}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate('HomeTab')}
           >
             <Ionicons name="arrow-back" size={SPACING * 2.5} color="#666" />
           </TouchableOpacity>
@@ -128,7 +176,7 @@ export default function CourseDetailScreen({ navigation }) {
             justifyContent: "space-between",
           }}
           resizeMode="contain"
-          source={{ uri: item.imageName }}
+          source={{ uri: courseData.imageName }}
         ></ImageBackground>
         <View
           style={{
@@ -143,43 +191,49 @@ export default function CourseDetailScreen({ navigation }) {
           }}
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Course Name:{item.courseName}{" "}
+            Course Name:{courseData.courseName}{" "}
           </Text>
-          <Text style={{ fontSize: 16 }}>Type:{item.type}</Text>
-          <Text style={{ fontSize: 16 }}>Location:{item.location}</Text>
+          <Text style={{ fontSize: 16 }}>Type:{courseData.type}</Text>
+          <Text style={{ fontSize: 16 }}>Location:{courseData.location}</Text>
           <Text style={{ fontSize: 16 }}>
-            Start time: {moment(item.startTime).format("DD-MM-YYYY")}
+            Start time: {moment(courseData.startTime).format("DD-MM-YYYY")}
           </Text>
           <Text style={{ fontSize: 16 }}>
             Registation Closed Date:{" "}
-            {moment(item.lastDateToRegister).format("DD-MM-YYYY ")}
+            {moment(courseData.lastDateToRegister).format("DD-MM-YYYY ")}
           </Text>
           <Text style={{ fontSize: 16 }}>
             Last Time To Withdraw:{" "}
-            {moment(item.lastDateToWithdraw).format("DD-MM-YYYY ")}
+            {moment(courseData.lastDateToWithdraw).format("DD-MM-YYYY ")}
           </Text>
           <Text style={{ fontSize: 16 }}>
-            End Time: {moment(item.endTime).format("DD-MM-YYYY")}
+            End Time: {moment(courseData.endTime).format("DD-MM-YYYY")}
           </Text>
-          <Text style={{ fontSize: 16 }}>Price:{item.price}$</Text>
+          <Text style={{ fontSize: 16 }}>Price:{courseData.price}$</Text>
           <Text style={{ fontSize: 16 }}>
-            Available Capacity:{item.classCapacity}
+            Available Capacity:{courseData.classCapacity}
           </Text>
-          <Text style={{ fontSize: 16 }}>Description:{item.description}</Text>
+          <Text style={{ fontSize: 16 }}>Description:{courseData.description}</Text>
         </View>
 
         <View style={styles.fixToText}>
           <Button
-            title={stateButton ===true ? "Enroll":"Enrolled"}
-            disabled={stateButton ===true? !isDisabled : isDisabled}
-            color={stateButton ===true ? "#841684" : "#CCCCCC"}
+            title={stateEnroll === true ? "Enroll" : "Enrolled"}
+            disabled={courseData.button !== "Enroll" && stateEnroll === false}
+            color={stateEnroll === true ? "#841684" : "#CCCCCC"}
             onPress={() => HandleEnrollCourse()}
           />
           <Button
-            title="Withdraw"
-            disabled={stateButton ===true ? isDisabled : !isDisabled}
-            color={stateButton === true ? "#CCCCCC" : "#ed2718"}
+            title={stateWithdraw === true ? "Withdraw" : "Withdrawed"}
+            disabled={courseData.button !== "Withdraw" && stateWithdraw === false}
+            color={stateWithdraw === true ? "#841684" : "#CCCCCC"}
             onPress={() => showConfirmDialog()}
+          />
+          <Button
+            title={stateFeedback === true ? "Feedback" : "Feedbacked"}
+            disabled={courseData.button !== "Feedback" && stateFeedback === false}
+            color={stateFeedback === true ? "#841684" : "#CCCCCC"}
+            onPress={() => HandleFeedback()}
           />
         </View>
       </View>

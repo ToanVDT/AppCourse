@@ -4,52 +4,38 @@ import { apiURL } from "../config/config";
 import axiosInstance from "../context/helpers/axiosInstance.js";
 
 const checkExistedSendConfirmMail = async (
- 
   loginName,
   name,
   password,
   telNum,
-  email,
-
+  email
 ) => {
   try {
     const res = await axios.post(
       `${apiURL}/api/User/check-existed-and-send-confirm-mail`,
       {
-      loginName,
-      name,
-      password,
-      telNum,
-      email,
-   }
+        loginName,
+        name,
+        password,
+        telNum,
+        email,
+      }
     );
-    console.log("API call",res.data)
+    console.log("API call", res.data);
     return res.data;
-    
   } catch (error) {
     console.log(error);
   }
 };
-const RegisterUser = async (
-
-  loginName,
-  name,
-  password,
-  telNum,
-  email,
-
-) => {
+const RegisterUser = async (loginName, name, password, telNum, email) => {
   try {
-    const res = await axios.post(
-      `${apiURL}/api/User/register-user`,
-     {
+    const res = await axios.post(`${apiURL}/api/User/register-user`, {
       loginName,
       name,
       password,
       telNum,
       email,
-    }
-    );
+    });
 
     return res.data;
   } catch (error) {
@@ -62,7 +48,7 @@ const SendForgetCode = async (email) => {
       `${apiURL}/api/User/send-forget-code?email=${email}`
     );
 
-    console.log("API call ",res.data)
+    console.log("API call ", res.data);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -70,10 +56,19 @@ const SendForgetCode = async (email) => {
 };
 const changePassword = async (loginUser, password) => {
   try {
-    const res = await axios.post(
-      `${apiURL}/api/User/change-password`,
-     { loginUser,
-      password}
+    const res = await axios.post(`${apiURL}/api/User/change-password`, {
+      loginUser,
+      password,
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getCourseById = async (courseId, userId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${apiURL}/api/User/get-course-by-courseId?courseId=${courseId}&userId=${userId}`
     );
     return res.data;
   } catch (error) {
@@ -99,15 +94,14 @@ const EnrollCourse = async (
   isActive
 ) => {
   try {
-    const res = await axiosInstance.post(
-      `${apiURL}/api/User/enroll-course`,
-      {userId,
+    const res = await axiosInstance.post(`${apiURL}/api/User/enroll-course`, {
+      userId,
       courseId,
       registerStatus,
       createdDate,
       updatedDate,
-      isActive}
-    );
+      isActive,
+    });
     console.log(res.data.message);
     return res.data.message;
   } catch (error) {
@@ -117,17 +111,28 @@ const EnrollCourse = async (
 
 const WithdrawCourse = async (userId, courseId) => {
   try {
-    const res = await axiosInstance.post(
-      `${apiURL}/api/User/withdraw-course`,
-     { userId,
-      courseId}
-    );
+    const res = await axiosInstance.post(`${apiURL}/api/User/withdraw-course`, {
+      userId,
+      courseId,
+    });
     return res.data.message;
   } catch (error) {
     console.log(error);
   }
 };
-
+const FeedbackCourse = async (userId, courseId, userName, remark) => {
+  try {
+    const res = await axiosInstance.post(`${apiURL}/api/User/feedback-course`, {
+      userId,
+      courseId,
+      userName,
+      remark,
+    });
+    return res.data.message;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const GetJoiningCourse = async (userId) => {
   try {
     const res = await axiosInstance.get(
@@ -142,7 +147,8 @@ const GetJoiningCourse = async (userId) => {
 const GetInfoUser = async (userId) => {
   // var headers = { 'content-type': 'application/json'}
   try {
-    const res = await axiosInstance.get(`${apiURL}/api/User/get-info-user?userId=${userId}`
+    const res = await axiosInstance.get(
+      `${apiURL}/api/User/get-info-user?userId=${userId}`
     );
     return res.data;
   } catch (error) {
@@ -163,14 +169,13 @@ const CheckExistAndSendConfirmChangeMail = async (email) => {
 
 const UpdateProfile = async (id, loginName, name, email, telNum) => {
   try {
-    const res = await axiosInstance.post(
-      `${apiURL}/api/User/update-profile`,
-      {id,
+    const res = await axiosInstance.post(`${apiURL}/api/User/update-profile`, {
+      id,
       loginName,
       name,
       email,
-      telNum}
-    );
+      telNum,
+    });
 
     return res.data;
   } catch (error) {
@@ -190,4 +195,6 @@ export {
   GetInfoUser,
   CheckExistAndSendConfirmChangeMail,
   UpdateProfile,
+  getCourseById,
+  FeedbackCourse
 };
