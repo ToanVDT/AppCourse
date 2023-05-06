@@ -1,201 +1,80 @@
-import React, { useState } from 'react';
-import { Feather } from "@expo/vector-icons";
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    TouchableHighlight,
-    View,
-} from 'react-native';
-import {
-  Provider,
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  DialogActions,
-  } from "@react-native-material/core";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from "react";
 
-import { SwipeListView } from 'react-native-swipe-list-view';
-import Courses from "../data/AllCourseX.json";
+import jwt_decode from "jwt-decode";
+// @ts-ignore
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { GetJoiningCourse } from "../Api/UserAPI.js";
+import { StatusBar, Text, View } from "react-native";
+import moment from "../../node_modules/moment/moment";
 
+export default function CourseScreen({ navigation }) {
+  const [visible, setVisible] = useState(false);
 
-export default function CourseScreen({navigation}) {
-    const [visible, setVisible] = useState(false);
-    const [pos, setPos] = useState();
-    const [data, setData] = useState();
-    const [listData, setListData] = useState(Courses.data);
-        
-    const closeRow = (rowMap, rowKey) => {
-        if (rowMap[rowKey]) {
-            rowMap[rowKey].closeRow();
-        }
-    };
+  const [listCourse, setListCourse] = useState([]);
+  const [loadData, setLoadData] = useState(0)
+  console.log("start")
 
-    const deleteRow = (rowMap, rowKey) => {
-        closeRow(rowMap, rowKey);
-        const prevIndex = listData.filter((item) => item.key !== rowKey)
-        setListData(prevIndex);
-    };
+  const getCourseUserJoin = async () => {
 
-    const onRowDidOpen = rowKey => {
-        console.log('This row opened', rowKey);
-    };
+    console.log("eeee")
+    const authToken = await AsyncStorage.getItem("authToken");
 
-    const renderItem = data => {
-        
-        return(
-        <TouchableHighlight
-    
-            key={data.item.courseId}
-            onPress={() => navigation.navigate('CourseDetail',{item:data.item})}
-            
-            style={styles.rowFront}
-            underlayColor={'#AAA'}
+    // console.log("authToken",authToken)
+
+    if (authToken != undefined) {
+      const userInfo = jwt_decode(authToken);
+
+      // console.log("userInfo", userInfo.id);
+
+      const res = await GetJoiningCourse(userInfo.id);
+      // console.log("res",res)
+
+      if (res.isSuccess == true) {
+        setListCourse(res.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getCourseUserJoin();
+  }, []);
+
+  // console.log("listCourse", listCourse);
+  return (
+    <>
+      <Text
+        style={{
+          fontSize: 20,
+          color: "#000",
+          backgroundColor: "#93FFE8",
+          height: 40,
+          paddingLeft: 15,
+          borderRadius:15,
+          fontWeight: "bold",
+          marginTop: "10%",
+          marginBottom:40,
+          paddingTop:5,
+        }}
+      >
+        Registered Course
+      </Text>
+      {listCourse.map((item, i) => (
+        <View
+          style={{
+            margin: "7%",
+            // borderRadius: 2,
+            backgroundColor: "#DDDDDD",
+            height: "14%",
+            marginTop:-10,
+          }}
+          key={i}
         >
-            <View>
-                <Text>{data.item.courseName}</Text>
-            </View>
-        </TouchableHighlight>
-    )};
-
-    const renderHiddenItem = (data, rowMap) => {
-        
-        return(
-        <View style={[styles.rowBack]}>
-            {/* <Text style={styles.backLeftBtn} onPress={()=>navigation.navigate("RosterRegister")}>
-            <Feather name="clipboard" size={22} color="black"></Feather>
-                Roster Register</Text> */}
-            <TouchableOpacity
-                style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                onPress={() => closeRow(rowMap, rowKey)}
-            >
-                <Text style={styles.backTextWhite} onPress={()=> navigation.navigate("EditCourse")}>
-                    <Feather name="edit" size={22} color="#7C808D"></Feather>
-                    Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={[styles.backRightBtn, styles.backRightBtnRight]}
-                onPress={() => {
-                    setVisible(true);
-                    setPos([rowMap, data.item.key]);
-                    setData([data.item.courseName])}}
-            >
-                <Text style={styles.backTextWhite}>
-                <Feather name="trash-2" size={22} color="#7C808D"></Feather>
-                    Delete
-                    </Text>
-            </TouchableOpacity>
+          <Text style={{fontSize:20,fontStyle:"italic", fontWeight:"bold"}}>Course Name: {item.courseName}</Text>
+          <Text style={{fontSize:20,fontStyle:"italic"}}>Start Time: {moment(item.startTime).format("DD-MM-YYYY")}</Text>
+          <Text style={{fontSize:20,fontStyle:"italic"}}>Type: {item.type}</Text>
         </View>
-    )};
-    
-    return (
-        <Provider>
-        <SafeAreaView style={styles.container}>
-          <View style={{marginTop:"10%",backgroundColor:"#93FFE8",height:40}}>
-            <Text style={{
-                color:"black",
-                fontSize:20,
-                fontWeight:"bold",
-                paddingLeft:15,
-                padingTop:20}}>Khóa đã đăng ký</Text>
-          </View>
-            <SwipeListView              
-                data={listData}
-                renderItem={renderItem}
-                renderHiddenItem={renderHiddenItem}
-                leftOpenValue={75}
-                rightOpenValue={-150}
-                previewRowKey={'0'}
-                previewOpenValue={-40}
-                previewOpenDelay={3000}
-                onRowDidOpen={onRowDidOpen}
-            />
-        </SafeAreaView>
-        <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-                <DialogHeader title="Delete Course"/>
-                    <DialogContent>
-                    <Text>
-                        Delete Course:{data}?
-                    </Text>
-                </DialogContent>
-                <DialogActions>
-                <Button
-                    title="Cancel"
-                    compact
-                    variant="text"
-                    onPress={() =>setVisible(false)}
-                />
-                <Button
-                    title="Ok"
-                    compact
-                    variant="text"
-                    onPress={() => {deleteRow(pos[0],pos[1]);
-                    setVisible(false)}}/>
-                </DialogActions>
-            </Dialog>
-        </Provider>
-    );
+      ))}
+    </>
+  );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-        flex: 1,
-        
-    },
-    createCourse:{
-        color: '#000',
-    },
-    backTextWhite: {
-        color: '#FFF',
-    },
-    rowFront: {
-        marginTop:"4%",
-        alignItems: 'center',
-        backgroundColor: '#CCC',
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        justifyContent: 'center',
-        height: 50,
-    },
-    rowBack: {
-      marginTop:"4%",
-        alignItems: 'center',
-        backgroundColor: '#DDD',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 15,
-    },
-    backRightBtn: {
-        alignItems: 'center',
-        bottom: 0,
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 0,
-        width: 75,
-    },
-    backRightBtnLeft: {
-        backgroundColor: 'blue',
-        right: 75,
-    },
-    backRightBtnRight: {
-        backgroundColor: 'red',
-        right: 0,
-    },
-    backLeftBtn: {
-        alignItems: 'center',
-        bottom: 0,
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 0,
-        width: 75,
-        color:'white',
-        backgroundColor: 'green',
-        left: 0,
-    },
-    
-});

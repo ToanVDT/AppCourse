@@ -16,7 +16,8 @@ function BottomTabNavigators() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
+        unmountOnBlur:true,
+        tabBarShowLabel: true,
         tabBarStyle: {
           backgroundColor: "white",
           position: "absolute",
@@ -56,7 +57,7 @@ function BottomTabNavigators() {
       />
 
       <Tab.Screen
-        name="course"
+        name="Course"
         component={CourseScreen}
         options={{
           tabBarIcon: ({ focused }) => (

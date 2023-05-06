@@ -1,11 +1,12 @@
 import React from "react";
-import AppNavigation from "./src/Navigations";
+// @ts-ignore
+import AppNavigation from "./src/Navigations/index";
+
 
 export default function App() {
   return (
-    <AppNavigation />
-
-   
+      <AppNavigation />
+     
   );
 }
 
